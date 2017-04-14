@@ -1,0 +1,23 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class SpawnPoint : MonoBehaviour {
+
+    float spawnDiff = 0f;
+
+	// Use this for initialization
+	void Start () {
+	
+	}
+	
+	// Update is called once per frame
+	void Update () {
+        if (GameManager.Instance.debug || GameManager.Instance.playing) {
+            spawnDiff += Time.deltaTime;
+            if((Random.Range(0, (int)((GameManager.Instance.spawnRate*3)/GameManager.Instance.difficulty))==0)||spawnDiff>=GameManager.Instance.spawnRate*3/60f) {
+                //TODO:actually spawn the fuckers
+                spawnDiff = 0;
+            }
+        }
+	}
+}
