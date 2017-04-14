@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour {
     public bool playing = false;
     public float spawnRate = 300;
 
+    [Header("Object Reference")]
+    public Transform[] buildings;
 
     // Use this for initialization
     void Awake() {
@@ -24,7 +26,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start () {
-        //StartCoroutine(Countdown());
+        StartCoroutine(Countdown());
 	}
 	
 	// Update is called once per frame
@@ -45,6 +47,10 @@ public class GameManager : MonoBehaviour {
             //TODO: Add GUI component
         }
         playing = true;
+    }
+
+    public Transform GetRandomBuilding() {
+        return buildings[Random.Range(0, buildings.Length)];
     }
 
 }
