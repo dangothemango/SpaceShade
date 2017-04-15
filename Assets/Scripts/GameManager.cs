@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour {
 
     public bool debug = false;
 
-    [Header("Helper Variables")]
+    [Header("Balance Variables")]
     public float difficulty;
     //as of now increase difficulty over time, experiment with difficulty as a function of score
     //although these are probably the same...
@@ -17,6 +17,20 @@ public class GameManager : MonoBehaviour {
 
     [Header("Object Reference")]
     public Transform[] buildings;
+
+    //Runtime Helpers
+    Building activeBuilding;
+    public int score = 0;
+
+    public Building ActiveBuilding {
+        get {
+            return activeBuilding;
+        }
+        set {
+            activeBuilding = value;
+            Debug.Log("Setting Active Building");
+        }
+    }
 
     // Use this for initialization
     void Awake() {
@@ -53,4 +67,12 @@ public class GameManager : MonoBehaviour {
         return buildings[Random.Range(0, buildings.Length)];
     }
 
+    public void HitShip() {
+        score += (int)(10*difficulty);
+        Debug.Log(score);
+    }
+
+    public void GameOver() {
+        Debug.Log("Score: " + score.ToString());
+    }
 }

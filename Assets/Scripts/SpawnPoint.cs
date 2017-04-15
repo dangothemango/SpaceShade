@@ -5,6 +5,8 @@ public class SpawnPoint : MonoBehaviour {
 
     float spawnDiff = 0f;
 
+    public GameObject ship;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -15,7 +17,7 @@ public class SpawnPoint : MonoBehaviour {
         if (GameManager.Instance.debug || GameManager.Instance.playing) {
             spawnDiff += Time.deltaTime;
             if((Random.Range(0, (int)((GameManager.Instance.spawnRate*3)/GameManager.Instance.difficulty))==0)||spawnDiff>=GameManager.Instance.spawnRate*3/60f) {
-                //TODO:actually spawn the fuckers
+                Instantiate(ship, transform.position, new Quaternion());
                 spawnDiff = 0;
             }
         }
