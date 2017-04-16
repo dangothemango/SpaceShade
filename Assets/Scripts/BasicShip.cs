@@ -22,7 +22,9 @@ public class BasicShip : TappableObject {
 	// Update is called once per frame
 	void Update () {
         if (GameManager.Instance.playing) {
-            transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target.position, Mathf.Max(speed,GameManager.Instance.difficulty/3) * Time.deltaTime);
+        } else {
+            Destroy(this.gameObject);
         }
 	}
 

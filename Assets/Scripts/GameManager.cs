@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
     [Header("Object Reference")]
     public Transform[] buildings;
     public Text scoreDisplay;
+    public Text gameOverText;
     public SelectedBuilding selectedBuilding;
     public GameObject explosion;
 
@@ -73,7 +74,7 @@ public class GameManager : MonoBehaviour {
         }
         playing = true;
     }
-
+    
     public Transform GetRandomBuilding() {
         return buildings[Random.Range(0, buildings.Length)];
     }
@@ -84,6 +85,12 @@ public class GameManager : MonoBehaviour {
     }
 
     public void GameOver() {
-        Debug.Log("Score: " + score.ToString());
+        playing = false;
+        int high = PlayerPrefs.GetInt("HighScore", 0);
+        if (score > high) {
+            PlayerPrefs.SetInt("HighScore", score);
+        }
+        gameOverText.text = string.Format("Game Over\nScore: {0}\nHigh Score: {1}",score,high);
+        gameOverText.gameObject.SetActive(true);
     }
 }
