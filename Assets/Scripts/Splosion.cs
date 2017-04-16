@@ -3,11 +3,26 @@ using System.Collections;
 
 public class Splosion : MonoBehaviour {
 
-    public float lifetime = .5f;
+    SpriteRenderer r;
+
+    public Color color {
+        get {
+            return r.color;
+        }
+        set {
+            r.color = value;
+        }
+    }
+
+    public float Lifetime {
+        set {
+            StartCoroutine(DestroyLater(value));
+        }
+    }
 
 	// Use this for initialization
-	void Start () {
-        StartCoroutine(DestroyLater(lifetime));
+	void Awake () {
+        r = GetComponent<SpriteRenderer>();
 	}
 
     IEnumerator DestroyLater(float t) {

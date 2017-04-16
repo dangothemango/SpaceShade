@@ -28,11 +28,14 @@ public class BasicShip : TappableObject {
 
     private void OnCollisionEnter2D(Collision2D collision) {
         Debug.Log("Collide Ship");
-        KillShip();
+        KillShip(r.color);
     }
 
-    void KillShip() {
-        Instantiate(explosion, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360.0f)));
+    void KillShip(Color c) {
+        GameObject g=(GameObject)Instantiate(GameManager.Instance.explosion, transform.position, Quaternion.Euler(0, 0, Random.Range(0, 360.0f)));
+        Splosion s = g.GetComponent<Splosion>();
+        s.color = c;
+        s.Lifetime = GameManager.Instance.shipExplosionLife;
         Destroy(this.gameObject);
     }
 
@@ -43,7 +46,7 @@ public class BasicShip : TappableObject {
         if (r.color != c) {
             GameManager.Instance.HitShip();
             if (c.r == c.g && c.g == c.b && c.b == 0) {
-                KillShip();
+                KillShip(b);
             }
             r.color = c;
         }

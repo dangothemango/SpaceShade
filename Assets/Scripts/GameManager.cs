@@ -20,6 +20,11 @@ public class GameManager : MonoBehaviour {
     public Transform[] buildings;
     public Text scoreDisplay;
     public SelectedBuilding selectedBuilding;
+    public GameObject explosion;
+
+    [Header("Asthetic Variables")]
+    public float shotExplosionLife=.2f;
+    public float shipExplosionLife=.5f;
 
     //Runtime Helpers
     Building activeBuilding;
