@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour {
 
-    // Use this for initialization
-    void Start() {
 
-    }
 
     // Update is called once per frame
     void Update() {
@@ -29,11 +27,20 @@ public class Player : MonoBehaviour {
             if (hit && hit.collider != null) {
                 Debug.Log("I'm hitting " + hit.collider.name);
                 foreach (TappableObject tp in hit.transform.gameObject.GetComponents<TappableObject>()) {
+                    if (tp.GetType() != typeof(Building)) {
+                        DrawLine(inputLoc);
+                    }
                     tp.OnTap();
                 }
+            } else {
+                DrawLine(inputLoc);
             }
         }
-
-
     }
+
+    void DrawLine(Vector3 position) {
+        LineDraw.lineQueue.Add(position);
+    }
+
+    
 }

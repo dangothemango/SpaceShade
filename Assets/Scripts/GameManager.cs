@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -17,10 +18,12 @@ public class GameManager : MonoBehaviour {
 
     [Header("Object Reference")]
     public Transform[] buildings;
+    public Text scoreDisplay;
+    public SelectedBuilding selectedBuilding;
 
     //Runtime Helpers
     Building activeBuilding;
-    public int score = 0;
+    int score = 0;
 
     public Building ActiveBuilding {
         get {
@@ -28,6 +31,8 @@ public class GameManager : MonoBehaviour {
         }
         set {
             activeBuilding = value;
+            selectedBuilding.trans = activeBuilding.transform;
+            selectedBuilding.color = activeBuilding.color;
             Debug.Log("Setting Active Building");
         }
     }
@@ -41,6 +46,7 @@ public class GameManager : MonoBehaviour {
 
     void Start () {
         StartCoroutine(Countdown());
+        ActiveBuilding = buildings[0].GetComponent<Building>();
 	}
 	
 	// Update is called once per frame
@@ -68,8 +74,8 @@ public class GameManager : MonoBehaviour {
     }
 
     public void HitShip() {
-        score += (int)(10*difficulty);
-        Debug.Log(score);
+        score += (int)(10 * difficulty);
+        scoreDisplay.text = string.Format("Score: {0}", score);
     }
 
     public void GameOver() {
