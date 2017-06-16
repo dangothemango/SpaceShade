@@ -14,7 +14,7 @@ public class SpawnPoint : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (GameManager.Instance.debug || GameManager.Instance.playing) {
+        if (GameManager.Instance.gameState==GameManager.GameState.running) {
             spawnDiff += Time.deltaTime;
             if((Random.Range(0, (int)((GameManager.Instance.spawnRate*3)/GameManager.Instance.difficulty))==0)||spawnDiff>=GameManager.Instance.spawnRate*3/60f) {
                 Instantiate(ship, transform.position, new Quaternion());

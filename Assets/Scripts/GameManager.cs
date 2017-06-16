@@ -13,7 +13,6 @@ public class GameManager : MonoBehaviour {
     //as of now increase difficulty over time, experiment with difficulty as a function of score
     //although these are probably the same...
     public float difficultyRamp = .01f;
-    public bool playing = false;
     public float spawnRate = 300;
 
     [Header("Object Reference")]
@@ -30,6 +29,14 @@ public class GameManager : MonoBehaviour {
     //Runtime Helpers
     Building activeBuilding;
     int score = 0;
+    public GameState gameState = GameState.preStart;
+
+    public enum GameState {
+        preStart,
+        running,
+        paused,
+        ended
+    }
 
     public Building ActiveBuilding {
         get {
@@ -45,7 +52,7 @@ public class GameManager : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
-        if (GameManager.Instance == null || GameManager.Instance.playing) {
+        if (GameManager.Instance == null || GameManager.Instance.gameState==GameState.ended) {
             GameManager.Instance = this;
         }
     }
@@ -57,13 +64,13 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (playing) {
+        if (gameState == GameState.running) {
             difficulty += difficultyRamp * Time.deltaTime;
         }
 	}
 
     private void OnApplicationPause(bool pause) {
-        playing = pause;
+        gameState = GameState.paused;
         //TODO: pause gui
     }
 
@@ -72,7 +79,7 @@ public class GameManager : MonoBehaviour {
             yield return new WaitForSeconds(1);
             //TODO: Add GUI component
         }
-        playing = true;
+        gameState = GameState.running;
     }
     
     public Transform GetRandomBuilding() {
@@ -85,7 +92,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void GameOver() {
-        playing = false;
+        gameState = GameState.ended;
         int high = PlayerPrefs.GetInt("HighScore", 0);
         if (score > high) {
             PlayerPrefs.SetInt("HighScore", score);
