@@ -16,7 +16,7 @@ public class Atmosphere : MonoBehaviour {
 
     private void Update() {
         Color c = r.material.color;
-        if (c.a < 1f) {
+        if (c.a < 1f && GameManager.Instance.IsRunning) {
             c.a += .0002f;
             r.material.color = c;
             UpdateHealthDisplay(c.a);
@@ -32,6 +32,13 @@ public class Atmosphere : MonoBehaviour {
         if (c.a <= 0) {
             GameManager.Instance.GameOver();
         }
+    }
+
+    public void SetHealth(float f) {
+        Color c = r.material.color;
+        c.a = f;
+        r.material.color = c;
+        UpdateHealthDisplay(f);
     }
 
     void UpdateHealthDisplay(float newValue) {

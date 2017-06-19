@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
     public bool debug = false;
 
     [Header("Balance Variables")]
-    public float difficulty;
+    public float difficulty = 1;
     //as of now increase difficulty over time, experiment with difficulty as a function of score
     //although these are probably the same...
     public float difficultyRamp = .01f;
@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
 
     [Header("Object Reference")]
     public Transform[] buildings;
+    public Atmosphere atmosphere;
     public Text scoreDisplay;
     public Text gameOverText;
     public SelectedBuilding selectedBuilding;
@@ -36,6 +37,12 @@ public class GameManager : MonoBehaviour {
         running,
         paused,
         ended
+    }
+
+    public bool IsRunning {
+        get {
+            return gameState == GameState.running;
+        }
     }
 
     public Building ActiveBuilding {
@@ -64,7 +71,7 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (gameState == GameState.running) {
+        if (IsRunning) {
             difficulty += difficultyRamp * Time.deltaTime;
         }
 	}
@@ -88,7 +95,7 @@ public class GameManager : MonoBehaviour {
 
     public void HitShip() {
         score += (int)(10 * difficulty);
-        scoreDisplay.text = string.Format("Score: {0}", score);
+        UpdateScoreDisplay();
     }
 
     public void GameOver() {
@@ -100,4 +107,18 @@ public class GameManager : MonoBehaviour {
         gameOverText.text = string.Format("Game Over\nScore: {0}\nHigh Score: {1}",score,high);
         gameOverText.gameObject.SetActive(true);
     }
+
+    public void Restart() {
+        gameState = GameState.preStart;
+        atmosphere.SetHealth(1f);
+        score = 0;
+        difficulty = 1;
+        gameOverText.gameObject.SetActive(false);
+        UpdateScoreDisplay();
+        Start();
+    }
+
+    void UpdateScoreDisplay() {
+        scoreDisplay.text = string.Format("Score: {0}", score);
+    } 
 }
