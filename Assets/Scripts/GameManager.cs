@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour {
     [Header("Asthetic Variables")]
     public float shotExplosionLife = .2f;
     public float shipExplosionLife = .5f;
-    private Color[] countdownColors = { Color.red, Color.green, Color.blue };
+    private Color[] countdownColors = { Color.red, Color.blue, Color.green };
 
     //Runtime Helpers
     Building activeBuilding;
