@@ -8,7 +8,7 @@ public class Player : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (GameManager.Instance.gameState == GameManager.GameState.running) {
+        if (GameManager.Instance.gameState <= GameManager.GameState.running) {
             Vector3 inputLoc=Vector3.zero;
             if (Input.GetMouseButtonDown(0)) {
                 Debug.Log(Input.mousePosition);
