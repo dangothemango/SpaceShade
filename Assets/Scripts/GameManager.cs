@@ -19,16 +19,13 @@ public class GameManager : MonoBehaviour {
     [Header("Object Reference")]
     public Transform[] buildings;
     public Atmosphere atmosphere;
-    public Text scoreDisplay;
-    public Text gameOverText;
     public SelectedBuilding selectedBuilding;
     public GameObject explosion;
-    public Text countdownText;
+    public UIHandler ui;
 
     [Header("Asthetic Variables")]
     public float shotExplosionLife = .2f;
     public float shipExplosionLife = .5f;
-    private Color[] countdownColors = { Color.red, Color.blue, Color.green };
 
     //Runtime Helpers
     Building activeBuilding;
@@ -68,8 +65,8 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start() {
-        StartCoroutine(Countdown());
-        ActiveBuilding = buildings[0].GetComponent<Building>();
+        ui.ShowMainMenu();
+        ActiveBuilding = buildings[1].GetComponent<Building>();
     }
 
     // Update is called once per frame
@@ -83,34 +80,18 @@ public class GameManager : MonoBehaviour {
         if (pause) {
             gameState = GameState.paused;
             StopAllCoroutines();
+            ui.ShowPauseMenu();
         }
         else {
-            Countdown();
         }
-        //TODO: pause gui
     }
 
     IEnumerator Countdown() {
         yield return new WaitForSeconds(.5f);
         for (int i=countdownTime; i>0; i--) {
-            yield return StartCoroutine(CountdownFade(i));
-            //TODO: Add GUI component
+            yield return ui.ShowCountdown(i);
         }
         gameState = GameState.running;
-    }
-
-    IEnumerator CountdownFade(int n) {
-        countdownText.text = n.ToString();
-        countdownText.enabled = true;
-        Color c = countdownColors[n%3];
-        float i = 1;
-        while (i >= 0) {
-            c.a = i;
-            countdownText.color = c;
-            yield return null;
-            i -= Time.deltaTime;
-        }
-        countdownText.enabled = false;
     }
     
     public Transform GetRandomBuilding() {
@@ -119,7 +100,7 @@ public class GameManager : MonoBehaviour {
 
     public void HitShip() {
         score += (int)(10 * difficulty);
-        UpdateScoreDisplay();
+        ui.UpdateScoreDisplay(score);
     }
 
     public void GameOver() {
@@ -128,21 +109,16 @@ public class GameManager : MonoBehaviour {
         if (score > high) {
             PlayerPrefs.SetInt("HighScore", score);
         }
-        gameOverText.text = string.Format("Game Over\nScore: {0}\nHigh Score: {1}",score,high);
-        gameOverText.gameObject.SetActive(true);
+        ui.ShowEndGameMenu(score, high);
     }
 
-    public void Restart() {
+    public void StartGame() {
         gameState = GameState.preStart;
         atmosphere.SetHealth(1f);
         score = 0;
         difficulty = 1;
-        gameOverText.gameObject.SetActive(false);
-        UpdateScoreDisplay();
-        Start();
+        ui.ShowIngameOverlay();
+        ui.UpdateScoreDisplay(score);
+        StartCoroutine(Countdown());
     }
-
-    void UpdateScoreDisplay() {
-        scoreDisplay.text = string.Format("Score: {0}", score);
-    } 
 }

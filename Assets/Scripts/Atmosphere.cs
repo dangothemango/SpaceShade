@@ -8,8 +8,6 @@ public class Atmosphere : MonoBehaviour {
 
     public float damagePerHit = .5f;
 
-    public Text displayText;
-
     private void Start() {
         r = GetComponent<Renderer>();
     }
@@ -24,7 +22,6 @@ public class Atmosphere : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        Debug.Log("Collide");
         Color c =r.material.color;
         c.a -= damagePerHit;
         r.material.color = c;
@@ -42,6 +39,6 @@ public class Atmosphere : MonoBehaviour {
     }
 
     void UpdateHealthDisplay(float newValue) {
-        displayText.text = string.Format("Shield: {0}%", Mathf.Min(100,Mathf.Max((int)(newValue * 100),0)));
+        GameManager.Instance.ui.UpdateShieldHealth(Mathf.Min(100, Mathf.Max((int)(newValue * 100), 0)));
     }
 }
